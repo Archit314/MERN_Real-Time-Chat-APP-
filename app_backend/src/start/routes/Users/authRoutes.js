@@ -3,7 +3,7 @@ import { signIn, signUp } from "../../../app/controllers/Users/UserController.js
 
 const authRoutes = express.Router()
 
-authRoutes.get('/sign-up', signUp)
+authRoutes.post('/sign-up', signUp)
 authRoutes.post('/sign-in', signIn)
 
 export default authRoutes
