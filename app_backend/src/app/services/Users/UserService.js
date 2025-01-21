@@ -2,36 +2,99 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-// Mthod to generate JWT (JSON web token):
-export const generateJwtToken = async (tokenPayload, res) => {
+// Importing internal modules
+import User from "../../models/Users/UserModel.js"
 
-    // Creating JWT token:
-    const jwtToken = await jwt.sign(tokenPayload, process.env.JWT_SECRET_KEY, {
-        expiresIn: 60 * 60,
-    })
+export default class UserService{
 
-    // Setting jwt token in user cookies:
-    await res.cookie("jwt_token", jwtToken, {
-        maxAge: 300000,
-        httpOnly: true, // Prevent xss attacks cross-site scripting attacks
-        sameSite: "strict", // CSRF attacks cross-site request forgery attacks
-        secure: process.env.NODE_ENV !== "development"
-    })
+    // Mthod to generate JWT (JSON web token):
+    async generateJwtToken(tokenPayload, res){
 
-    console.log('Token generated successfully');
-    return jwtToken
-}
+        // Creating JWT token:
+        const jwtToken = await jwt.sign(tokenPayload, process.env.JWT_SECRET_KEY, {
+            expiresIn: 60 * 60,
+        })
 
-// Method to create hash password:
-export const generateHashPassword = async (password) => {
-    try {
-        const salt = await bcrypt.genSalt(10)   // This method is to generate a random string called a "salt" which is added to a password before hashing, making the resulting hash unique and more secure against rainbow table attacks
-        const encryptedPassword = await bcrypt.hash(password, salt)
+        // Setting jwt token in user cookies:
+        await res.cookie("jwt_token", jwtToken, {
+            maxAge: 300000,
+            httpOnly: true, // Prevent xss attacks cross-site scripting attacks
+            sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+            secure: process.env.NODE_ENV !== "development"
+        })
 
-        console.log('Password hashed successfully');
-        return encryptedPassword
-    } catch (error) {
-        console.error(error)
-        return false
+        console.log('Token generated successfully');
+        return jwtToken
+    }
+
+    // Method to create hash password:
+    async generateHashPassword(password){
+
+        try {
+            const salt = await bcrypt.genSalt(10)   // This method is to generate a random string called a "salt" which is added to a password before hashing, making the resulting hash unique and more secure against rainbow table attacks
+            const encryptedPassword = await bcrypt.hash(password, salt)
+
+            console.log('Password hashed successfully');
+            return encryptedPassword
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+
+    // Method to handle user Sign-up process:
+    async userSignUp(email, mobileNumber, password, fullName, userName, profilePic, res){
+
+        // Safety checks it user already exist with email or mobile number
+        const existUserWithEmail = await User.findOne({email})
+        if(existUserWithEmail){
+            return {status: 422, message: `Usre already exist with email: ${email}`}
+        }
+        else{
+            const existUserWithMobile = await User.findOne({mobileNumber})
+            if(existUserWithMobile){
+                return {status: 422, message: `User already exist with mobile number: ${mobileNumber}`}
+            }
+        }
+
+        const encryptedPassword = await this.generateHashPassword(password)
+        if(!encryptedPassword){
+            return {status: 500, message: `User signup process failed`}
+        }
+
+        // Creating new user on mongo DB cluster:
+        const newUser = new User({
+            fullName: fullName,
+            userName: userName,
+            mobileNumber: mobileNumber,
+            email: email,
+            password: encryptedPassword,
+            profilePic: profilePic? profilePic: ''
+        })
+
+        if(newUser){
+            // Generating new JWT token:
+            const generatedJwtToken = await this.generateJwtToken({userId: newUser._id, email: newUser.email, mobileNumber: newUser.mobileNumber}, res)
+            if(!generatedJwtToken){
+                return {status: 422, message: `User registration failed`}
+            }
+            // Saving new user on mongoDB cluster:
+            await newUser.save()
+            console.log('user generated successfully');
+
+            // Generating response for frontend:
+            const response = {
+                userId: newUser._id,
+                fullName: newUser.fullName,
+                userName: newUser.userName,
+                mobileNumber: newUser.mobileNumber,
+                email: newUser.email,
+                accessToken: generatedJwtToken
+            }
+            return {status: 200, message: `User signup successfully`, data: response}
+        }
+        else{
+            return {status: 422, message: `Failed to signup user into our system`}
+        }
     }
 }
