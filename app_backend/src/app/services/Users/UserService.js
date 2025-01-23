@@ -27,6 +27,24 @@ export default class UserService{
         return jwtToken
     }
 
+    // Method to get JWT (JSON Web Token):
+    async getJwtToken(password, encryptedPassword, tokenObject, res){
+
+        const passwordCorrect = await bcrypt.compare(password, encryptedPassword)
+        if (!passwordCorrect) {
+            return false
+        }
+        console.log('Enter password and encrypted password are equal');
+
+        // Generating JWT token:
+        const generatedToken = await this.generateJwtToken(tokenObject, res)
+        if(!generatedToken){
+            return false
+        }
+
+        return generatedToken
+    }
+
     // Method to create hash password:
     async generateHashPassword(password){
 
@@ -96,5 +114,35 @@ export default class UserService{
         else{
             return {status: 422, message: `Failed to signup user into our system`}
         }
+    }
+
+    async userSignIn(loginWithEmail, password, email, userName, res){
+
+        let user
+        if(loginWithEmail){
+            user = await User.findOne({email: email})
+            if(!user){
+                return {status: 422, message: `User with provided email not found, please sign-up first`}
+            }
+        }
+        else{
+            user = await User.findOne({userName: userName})
+            if(!user){
+                return {status: 422, message: `User with provided user name not found, please sign-up first`}
+            }
+        }
+
+        const tokenObject = {
+            userId: user._id,
+            email: user.email,
+            mobileNumber: user.mobileNumber
+        }
+
+        const getJwtToken = await this.getJwtToken(password, user.password, tokenObject, res)
+        if(!getJwtToken){
+            return {status: 422, message: `Incorrect credentials`}
+        }
+
+        return {status: 200, message: `User sign-in successfully`, data: getJwtToken}
     }
 }
