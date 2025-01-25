@@ -30,6 +30,7 @@ export const signUp = async (req, res) => {
     }
 }
 
+// Method to handle user sign in:
 export const signIn = async (req, res) => {
 
     const {email, password, userName, loginWithEmail} = req.body
@@ -63,4 +64,28 @@ export const signIn = async (req, res) => {
         res.status(500).json({status: 500, message: `Internal server error`})
     }
 
+}
+
+// Method to handle user profile update:
+export const profileUpdate = async (req, res) => {
+
+    try {
+        const {profilePic} = req.body
+        const userId = req.user._id
+
+        if(!profilePic){
+            return res.status(422).json({status: 422, message: `Please provide profile picture.`})
+        }
+
+        const userService = new UserService()
+        const uploadedProfilePic = await userService.uploadProfilePic(profilePic, userId)
+        if(uploadedProfilePic.status !== 200){
+            return res.status(uploadedProfilePic.status).json({status: uploadedProfilePic.status, message: uploadedProfilePic.message, data: uploadedProfilePic.data})
+        }
+
+        return res.status(uploadedProfilePic.status).json({status: uploadedProfilePic.status, message: uploadedProfilePic.message, data: uploadedProfilePic.data})
+
+    } catch (error) {
+        
+    }
 }

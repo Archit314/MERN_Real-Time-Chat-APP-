@@ -1,6 +1,7 @@
 // Importing external modules or library
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import cloudinary from "../../lib/cloudinaryConnection.js"
 
 // Importing internal modules
 import User from "../../models/Users/UserModel.js"
@@ -116,6 +117,7 @@ export default class UserService{
         }
     }
 
+    // Method to handle user sign-in process:
     async userSignIn(loginWithEmail, password, email, userName, res){
 
         let user
@@ -144,5 +146,35 @@ export default class UserService{
         }
 
         return {status: 200, message: `User sign-in successfully`, data: getJwtToken}
+    }
+
+    // Method to handle profile pic upload on cloudinary:
+    async uploadProfilePic(profilePic, userId){
+
+        const uploadedProfilePic = await cloudinary.uploader.upload(profilePic)
+        if(!uploadedProfilePic){
+            return {status: 422, message: `Failed to upload user on cloud`}
+        }
+
+        const uploadedProfile = await this.updateUserProfile(userId, uploadedProfilePic)
+        if(uploadedProfile.status !== 200){
+            return {status: uploadedProfile.status, message: uploadedProfile.message}
+        }
+
+        return {status: uploadedProfile.status, message: uploadedProfile.message, data: uploadedProfile.data}
+    }
+
+    // Method to update user profile into the database:
+    async updateUserProfile(userId, uploadedProfilePic){
+
+        const existUser = await User.findByIdAndUpdate(userId, {profilePic: uploadedProfilePic.secure_url}, {new: true})
+        if(!existUser){
+            console.log(`Failed to update profile pic of user into the DB`);
+            return {status: 422, message: `Failed to update profile pic of user into the DB`}
+        }
+        else{
+            console.log(`User profile pic updated successfuly in the DB`);
+            return {status: 200, message: `User profile pic updated successfuly in the DB`, data: existUser}
+        }
     }
 }
