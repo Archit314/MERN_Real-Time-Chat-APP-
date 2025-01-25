@@ -66,6 +66,16 @@ export const signIn = async (req, res) => {
 
 }
 
+// Method to check whether user is authenticated or not:
+export const authCheck = async (req, res) => {
+    try {
+        return res.status(200).json(req.user)
+    } catch (error) {
+        console.log(`Error in UserController -> authCheck: `, error.message);
+        return res.status(500).json({status: 500, message: `Internal server error`})
+    }
+}
+
 // Method to handle user profile update:
 export const profileUpdate = async (req, res) => {
 
