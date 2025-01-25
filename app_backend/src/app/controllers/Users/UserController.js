@@ -26,7 +26,7 @@ export const signUp = async (req, res) => {
         return res.status(200).json({status: createdUser.status, message: createdUser.message, data: createdUser.data})
     } catch (error) {
         console.log(`Error in the UserController -> signUp: `, error.message);
-        res.status(500).json({status: 500, message: `Internal server error`})
+        return res.status(500).json({status: 500, message: `Internal server error`})
     }
 }
 
@@ -61,7 +61,7 @@ export const signIn = async (req, res) => {
 
     } catch (error) {
         console.log(`Error in the UserController -> signIn: `, error.message);
-        res.status(500).json({status: 500, message: `Internal server error`})
+        return res.status(500).json({status: 500, message: `Internal server error`})
     }
 
 }
@@ -70,8 +70,9 @@ export const signIn = async (req, res) => {
 export const profileUpdate = async (req, res) => {
 
     try {
-        const {profilePic} = req.body
+        const {path} = req.file
         const userId = req.user._id
+        let profilePic = path
 
         if(!profilePic){
             return res.status(422).json({status: 422, message: `Please provide profile picture.`})
@@ -86,6 +87,7 @@ export const profileUpdate = async (req, res) => {
         return res.status(uploadedProfilePic.status).json({status: uploadedProfilePic.status, message: uploadedProfilePic.message, data: uploadedProfilePic.data})
 
     } catch (error) {
-        
+        console.log(`Error in the UserController -> profileUpdate: `, error.message);
+        return res.status(500).json({status: 500, message: `Internal server error`})
     }
 }

@@ -150,18 +150,25 @@ export default class UserService{
 
     // Method to handle profile pic upload on cloudinary:
     async uploadProfilePic(profilePic, userId){
+        try {
 
-        const uploadedProfilePic = await cloudinary.uploader.upload(profilePic)
-        if(!uploadedProfilePic){
-            return {status: 422, message: `Failed to upload user on cloud`}
+            const uploadedProfilePic = await cloudinary.uploader.upload(profilePic)
+            if(!uploadedProfilePic){
+                return {status: 422, message: `Failed to upload user on cloud`}
+            }
+    
+            console.log(`Image uploaded successfully`);
+            
+            const uploadedProfile = await this.updateUserProfile(userId, uploadedProfilePic)
+            if(uploadedProfile.status !== 200){
+                return {status: uploadedProfile.status, message: uploadedProfile.message}
+            }
+    
+            return {status: uploadedProfile.status, message: uploadedProfile.message, data: uploadedProfile.data}
+        } catch (error) {
+            console.log(`Error in UserService -> uploadProfilePic: `, error.message);
+            return {status: 500, message: error.message}
         }
-
-        const uploadedProfile = await this.updateUserProfile(userId, uploadedProfilePic)
-        if(uploadedProfile.status !== 200){
-            return {status: uploadedProfile.status, message: uploadedProfile.message}
-        }
-
-        return {status: uploadedProfile.status, message: uploadedProfile.message, data: uploadedProfile.data}
     }
 
     // Method to update user profile into the database:
