@@ -6,14 +6,16 @@ import dotenv from "dotenv"
 
 dotenv.config()
 const port = process.env.PORT
+import { connectDb } from "./app/lib/databaseConnection.js"
 
 // Project files importing
 import authRoutes from "./start/routes/Users/authRoutes.js"
-import { connectDb } from "./app/lib/databaseConnection.js"
+import messageRoutes from "./start/routes/Messages/messageRoutes.js"
 
 app.use(express.json())
 app.use(cookieParser())
 app.use('/api/user/auth', authRoutes)
+app.use('/api/user/messages', messageRoutes)
 
 // Starting server and connecting application to mongoDB
 app.listen(port, (req, res) => {
