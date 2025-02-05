@@ -11,3 +11,9 @@ Currently, two official plugins are available:
 
 <!-- For daisy UI component above tailwind -->
 -> npm i -D daisyui@latest
+
+<!-- For api request -->
+-> Axios
+
+<!-- For state management -->
+-> Zustand
