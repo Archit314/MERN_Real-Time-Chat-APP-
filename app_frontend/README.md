@@ -17,3 +17,5 @@ Currently, two official plugins are available:
 
 <!-- For state management -->
 -> Zustand
+
+<!-- Added Daisy UI customer theme in index.css and index.html -->
