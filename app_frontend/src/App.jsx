@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp'
 import Setting from './pages/Setting'
 import UserProfile from './pages/UserProfile'
 import { useAuthStore } from './store/useAuthStore'
+import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   const {authUser, checkAuth, isCheckingAuth} = useAuthStore()
@@ -32,6 +33,11 @@ const App = () => {
         <Route path="/setting" element={<Setting />} />
         <Route path="/user-profile" element={authUser? <UserProfile />: <Navigate to="/sign-in"/>} />
       </Routes>
+
+      <Toaster
+        position="bottom-left"
+        reverseOrder={false}
+      />
     </div>
   )
 }
