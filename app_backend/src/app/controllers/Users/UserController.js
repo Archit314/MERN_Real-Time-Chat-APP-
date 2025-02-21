@@ -54,8 +54,8 @@ export const signIn = async (req, res) => {
 
         const userService = new UserService()
         const getSignInDetail = await userService.userSignIn(loginWithEmail, password, email, userName, res)
-        if(!getSignInDetail){
-            return res.send(422).json({status: getSignInDetail.status, message: getSignInDetail.message})
+        if(getSignInDetail.status !== 200){
+            return res.status(422).json({status: getSignInDetail.status, message: getSignInDetail.message})
         }
         return res.status(200).json({status: getSignInDetail.status, message: getSignInDetail.message, data: getSignInDetail.data})
 
