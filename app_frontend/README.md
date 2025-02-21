@@ -19,3 +19,5 @@ Currently, two official plugins are available:
 -> Zustand
 
 <!-- Added Daisy UI customer theme in index.css and index.html -->
+
+<!-- for toast message we are using react-hot-toast -->
