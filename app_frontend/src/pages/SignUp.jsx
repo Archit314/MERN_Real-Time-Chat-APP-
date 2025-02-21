@@ -4,15 +4,15 @@ export default function SignUp() {
   return (
     <>
       <div className='bg-base-200 h-screen w-screen flex justify-center items-center'>
-        <div className='bg-base-300 rounded-lg shadow-xl overflow-hidden flex max-w-4xl w-full'>
+        <div className='bg-base-300 text-primary rounded-lg shadow-xl overflow-hidden flex max-w-4xl w-full'>
 
           {/* Left Section: */}
-          <div className='bg-base-300 hidden md:flex w-1/2 p-8'>
+          <div className='bg-base-300 hidden md:flex w-1/2 p-8 justify-center items-center'>
             Left Section
           </div>
 
           {/* Right Section: */}
-          <div className='bg-base-100 text-primary w-full md:w-1/2 p-8'>
+          <div className='bg-base-100 w-full md:w-1/2 p-8'>
             <h1 className='text-center text-3xl font-bold mb-5'>Sign up</h1>
 
             {/* Form */}
