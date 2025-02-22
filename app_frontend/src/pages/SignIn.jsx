@@ -7,10 +7,13 @@ export default function SignIn() {
 
   const {signIn} = useAuthStore()
 
+  let [defaultOption, setDefaultOption] = useState('Email')
+
   // Initial form fields value:
   let initialFormFields = {
     email: '',
-    password: ''
+    password: '',
+    username: ''
   }
 
   // State to hold form fields value:
@@ -29,13 +32,24 @@ export default function SignIn() {
   // Handler for form validation:
   const formValidation = async () => {
     // Check if email and password are not empty:
-    if(!formFields.email){
-      return {
-        status: 'ERROR',
-        message: 'Email is required'
+    if(defaultOption === 'Email'){
+      if(!formFields.email){
+        return {
+          status: 'ERROR',
+          message: 'Email is required'
+        }
       }
     }
-    else if(!formFields.password){
+    else{
+      if(!formFields.username){
+        return {
+          status: 'ERROR',
+          message: 'Username is required'
+        }
+      }
+    }
+
+    if(!formFields.password){
       return {
         status: 'ERROR',
         message: 'Password is required'
@@ -60,7 +74,8 @@ export default function SignIn() {
       const requestPayload = {
         email: formFields.email,
         password: formFields.password,
-        loginWithEmail: true
+        userName: formFields.username,
+        loginWithEmail: defaultOption === 'Email' ? true : false
       }
 
       // Calling sign in API:
@@ -96,11 +111,35 @@ export default function SignIn() {
         <div className='bg-base-100 text-primary w-full md:w-1/2 p-8'>
           <h2 className='text-center text-3xl font-bold mb-5'>SIGN IN</h2>
 
+          {/* <h4 className='p-5'>Sign Up Option:</h4> */}
+          <div className='p-5 flex justify-center gap-5'>
+            <label htmlFor="" className=''>Email
+              <input
+                type="radio" name="radio-12" checked={defaultOption === 'Email'} onChange={() => setDefaultOption('Email')}
+                className="radio bg-base-300 border-base-300 checked:bg-base-200 checked:text-primary checked:border-primary"
+              />
+            </label>
+            <p className='font-bold'>/</p>
+            <label htmlFor="" className=''>Username
+              <input
+                type="radio" name="radio-12" checked={defaultOption === 'Username'} onChange={() => setDefaultOption('Username')}
+                className="radio bg-base-300 border-base-300 checked:bg-base-200 checked:text-primary checked:border-primary"
+              />
+            </label>
+          </div>
+
           <form className='p-5 rounded-lg space-y-5 text-base' onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="" className='block'>Email</label>
-              <input id='email' type="email" className='w-full px-4 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none' value={formFields.email} onChange={handleOnChange}/>
-            </div>
+            {defaultOption === 'Email' ?
+              (<div>
+                <label htmlFor="" className='block'>Email</label>
+                <input id='email' type="email" className='w-full px-4 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none' value={formFields.email} onChange={handleOnChange}/>
+              </div>)
+              :
+              (<div>
+                <label htmlFor="" className='block'>User Name</label>
+                <input id='username' type="text" className='w-full px-4 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none' value={formFields.username} onChange={handleOnChange}/>
+              </div>)
+            }
             <div>
               <label htmlFor="" className='block'>Password</label>
               <input id='password' type="password" className='w-full px-4 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none' value={formFields.password} onChange={handleOnChange}/>
