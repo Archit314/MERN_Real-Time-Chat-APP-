@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/useAuthStore'
+import { Link } from 'react-router-dom'
 
 export default function SignIn() {
 
@@ -107,6 +108,10 @@ export default function SignIn() {
 
             <button className="w-full btn  btn-primary transition duration-500">Sign In</button>
           </form>
+
+          <div>
+            <p className='text-center'>Don't have an account? <Link to="/sign-up" className='text-primary hover:underline'>Sign Up</Link></p>
+          </div>
         </div>
       </div>
     </div>
