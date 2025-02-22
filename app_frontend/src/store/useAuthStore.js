@@ -47,5 +47,33 @@ export const useAuthStore = create((set) => ({
                 message: error.message
             }
         }
+    },
+
+    signUp: async (formData) => {
+        set({isSigningUp: true})
+        try {
+            const signUpResponse = await axiosInstance.post('/user/auth/sign-up', formData)
+            set({authUser: signUpResponse.data})
+            set({isSigningUp: false})
+
+            return {
+                status: signUpResponse.data.status,
+                message: signUpResponse.data.message
+            }
+        } catch (error) {
+            console.log(`Error in useAuthStore -> signUp: `, error);
+            set({authUser: null})
+            set({isSigningUp: false})
+            if(error.status == 422){
+                return {
+                    status: error.response.data.status,
+                    message: error.response.data.message
+                }
+            }
+            return {
+                status: 500,
+                message: error.message
+            }
+        }
     }
 }))

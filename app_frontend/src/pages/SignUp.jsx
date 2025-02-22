@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+import { useAuthStore } from '../store/useAuthStore'
 
 export default function SignUp() {
 
-  const [defaultOption, setDefaultOption] = useState('Email')
+  const {signUp} = useAuthStore()
+
   // State to hold form fields value:
   const initialFormFields = {
     fullname: '',
@@ -59,45 +61,31 @@ export default function SignUp() {
       status: 'SUCCESS',
       message: 'Form fields are valid'
     }
-
-
-    // if(defaultOption === 'Email'){
-    //   if(!formFields.email){
-    //     return {
-    //       status: 'ERROR',
-    //       message: 'Email is required'
-    //     }
-    //   }
-    // }
-    // else{
-    //   if(!formFields.username){
-    //     return {
-    //       status: 'ERROR',
-    //       message: 'Username is required'
-    //     }
-    //   }
-    // }
-
-    // if(!formFields.password){
-    //   return {
-    //     status: 'ERROR',
-    //     message: 'Password is required'
-    //   }
-    // }
-
-    // return {
-    //   status: 'SUCCESS',
-    //   message: 'Form fields are valid'
-    // }
   }
 
   const handleSubmit =  async(e) => {
     e.preventDefault()
-    console.log(formFields)
 
     const formValidationResponse = await formValidation()
     if(formValidationResponse.status === 'SUCCESS'){
-      toast.success(formValidationResponse.message)
+
+      const requestPayload = {
+        fullName: formFields.fullname,
+        userName: formFields.username,
+        mobileNumber: formFields.mobileNumber,
+        email: formFields.email,
+        password: formFields.password
+      }
+
+      const requestForSignUp = await signUp(requestPayload)
+      if(requestForSignUp.status === 200){
+        toast.success(requestForSignUp.message)
+        return
+      }
+      else{
+        toast.error(requestForSignUp.message)
+        return
+      }
     }
 
     toast.error(formValidationResponse.message)
@@ -130,7 +118,7 @@ export default function SignUp() {
               </div>
               <div>
                 <label htmlFor="" className='block'>Mobile Number</label>
-                <input id='mobilenumber' type="tel" pattern="[0-9]{10}" className='w-full px-4 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none' value={formFields.mobileNumber} onChange={handleOnChange}/>
+                <input id='mobileNumber' type="tel" pattern="[0-9]{10}" className='w-full px-4 py-2 mt-1 border rounded-md focus:ring-2 focus:ring-primary focus:outline-none' value={formFields.mobileNumber} onChange={handleOnChange}/>
               </div>
               <div>
                 <label htmlFor="" className='block'>Email</label>
