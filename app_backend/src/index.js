@@ -16,7 +16,7 @@ import messageRoutes from "./start/routes/Messages/messageRoutes.js"
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_ORIGIN,
     credentials: true
 }))
 app.use('/api/user/auth', authRoutes)
