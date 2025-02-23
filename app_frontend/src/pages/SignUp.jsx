@@ -94,7 +94,7 @@ export default function SignUp() {
 
   return (
     <>
-      <div className='bg-base-200 h-screen w-screen flex justify-center items-center'>
+      <div className='bg-base-200 min-h-screen flex justify-center items-center'>
         <div className='bg-base-300 text-primary rounded-lg shadow-xl overflow-hidden flex max-w-4xl w-full'>
 
           {/* Left Section: */}

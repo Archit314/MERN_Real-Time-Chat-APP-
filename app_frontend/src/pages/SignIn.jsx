@@ -100,7 +100,7 @@ export default function SignIn() {
 
   return (
     <>
-    <div className='bg-base-200 h-screen w-screen flex justify-center items-center'>
+    <div className='bg-base-200 min-h-screen flex justify-center items-center'>
       <div className='bg-blue-500 flex rounded-lg shadow-xl overflow-hidden max-w-4xl w-full'>
         {/* Left Section */}
         <div className='bg-base-300 text-primary hidden md:flex w-1/2 items-center justify-center p-8'>
