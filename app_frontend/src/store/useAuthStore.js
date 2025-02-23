@@ -7,6 +7,7 @@ export const useAuthStore = create((set) => ({
     isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
+    isLoggingOut: false,
 
     checkAuth: async () => {
         try {
@@ -70,6 +71,35 @@ export const useAuthStore = create((set) => ({
                     message: error.response.data.message
                 }
             }
+            return {
+                status: 500,
+                message: error.message
+            }
+        }
+    },
+
+    logout: async () => {
+        set({isLoggingOut: true})
+        try {
+            const logoutResponse = await axiosInstance.post('/user/auth/logout')
+            set({authUser: null})
+            set({isLoggingOut: false})
+
+            return {
+                status: logoutResponse.data.status,
+                message: logoutResponse.data.message
+            }
+        }
+        catch (error) {
+            console.log(`Error in useAuthStore -> logout: `, error);
+            set({isLoggingOut: false})
+            if(error.status == 422){
+                return {
+                    status: error.response.data.status,
+                    message: error.response.data.message
+                }
+            }
+
             return {
                 status: 500,
                 message: error.message
