@@ -3,7 +3,7 @@ import express from "express"
 import multer from "multer"
 
 // Importing internal modules or library:
-import { authCheck, logout, profileUpdate, signIn, signUp } from "../../../app/controllers/Users/UserController.js"
+import { authCheck, getProfile, logout, profileUpdate, signIn, signUp } from "../../../app/controllers/Users/UserController.js"
 import { userAuth } from "../../../app/middleware/UserAuth/UserAuthMiddleware.js"
 
 // Getting Router from express module:
@@ -22,6 +22,9 @@ authRoutes.post('/logout', logout)
 
 // Route to check wheather user is authenticated or not:
 authRoutes.get('/check', userAuth, authCheck)
+
+// Route to get user Profile:
+authRoutes.get('/profile', userAuth, getProfile)
 
 // Route to handle user profile update:
 authRoutes.put('/profile/update', userAuth, upload.single('profilePic'), profileUpdate)

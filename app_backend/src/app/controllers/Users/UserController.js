@@ -94,6 +94,24 @@ export const authCheck = async (req, res) => {
     }
 }
 
+// Method to get user profile:
+export const getProfile = async (req, res) => {
+    try {
+        const responseData = {
+            id: req.user._id,
+            fullName: req.user.fullName,
+            userName: req.user.userName,
+            email: req.user.email,
+            mobileNumber: req.user.mobileNumber,
+            createdAt: req.user.createdAt
+        }
+        return res.status(200).json({status: 200, message: `User profile fetched successfully`, data: responseData})
+    } catch (error) {
+        console.log(`Error in UserController -> getProfile: `, error.message);
+        return res.status(500).json({status: 500, message: `Internal server error`})
+    }
+}
+
 // Method to handle user profile update:
 export const profileUpdate = async (req, res) => {
 

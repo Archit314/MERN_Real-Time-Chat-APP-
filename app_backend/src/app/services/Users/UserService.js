@@ -13,7 +13,7 @@ export default class UserService{
 
         // Creating JWT token:
         const jwtToken = await jwt.sign(tokenPayload, process.env.JWT_SECRET_KEY, {
-            expiresIn: 60 * 60,
+            expiresIn: '1h',
         })
 
         // Setting jwt token in user cookies:
