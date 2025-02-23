@@ -105,5 +105,34 @@ export const useAuthStore = create((set) => ({
                 message: error.message
             }
         }
+    },
+
+    getProfile: async () => {
+        try {
+            
+            const profileReaponse = await axiosInstance.get('/user/auth/profile')
+
+            return {
+                status: profileReaponse.data.status,
+                message: profileReaponse.data.message,
+                data: profileReaponse.data.data
+            }
+        } catch (error) {
+            console.log(`Error in useAuthStore -> getProfile: `, error);
+            if(error.status == 422){
+                return {
+                    status: error.response.data.status,
+                    message: error.response.data.message,
+                    data: null
+                }
+            }
+
+            return {
+                status: 500,
+                message: error.message,
+                data: null
+            }
+            
+        }
     }
 }))

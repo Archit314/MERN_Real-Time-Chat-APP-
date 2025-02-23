@@ -15,10 +15,9 @@ export default function Navbar() {
       toast.success(requestForLogout.message)
       return
     }
-    else{
-      toast.error(requestForLogout.message)
-      return
-    }
+
+    toast.error(requestForLogout.message)
+    return
   }
 
   return (
@@ -32,14 +31,15 @@ export default function Navbar() {
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-300 rounded-box z-1 mt-3 w-52 p-2 shadow">
-              {authUser && <li><Link>Profile</Link></li>}
+              {authUser && <li><Link to='/'>Home</Link></li>}
+              {authUser && <li><Link to='/user-profile'>Profile</Link></li>}
               <li><Link>Setting</Link></li>
               {authUser && <li><button onClick={logoutUser}>Logout</button></li>}
             </ul>
           </div>
         </div>
         <div className="navbar-center">
-          <Link className="btn btn-ghost text-xl">VaartaLap</Link>
+          <Link className="btn btn-ghost text-xl" to='/'>VaartaLap</Link>
         </div>
         <div className="navbar-end">
           <button className="btn btn-ghost btn-circle">
