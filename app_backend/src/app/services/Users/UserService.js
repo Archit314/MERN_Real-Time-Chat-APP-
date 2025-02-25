@@ -20,8 +20,8 @@ export default class UserService{
         await res.cookie("jwt_token", jwtToken, {
             maxAge: 3600000, // 1 hour (60 * 60 * 1000)
             httpOnly: true, // Prevent xss attacks cross-site scripting attacks
-            sameSite: "strict", // CSRF attacks cross-site request forgery attacks
-            secure: process.env.NODE_ENV !== "development"
+            sameSite: "none", // CSRF attacks cross-site request forgery attacks or // Allows cross-site requests
+            secure: process.env.NODE_ENV !== "development" // Ensures cookie is only sent over HTTPS
         })
 
         console.log('Token generated successfully');
