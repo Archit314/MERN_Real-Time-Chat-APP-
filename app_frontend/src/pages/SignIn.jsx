@@ -104,8 +104,8 @@ export default function SignIn() {
       <div className='bg-blue-500 flex rounded-lg shadow-xl overflow-hidden max-w-4xl w-full'>
         {/* Left Section */}
         <div className='bg-base-300 text-primary hidden md:flex w-1/2 items-center justify-center p-8'>
-          left section
           {/* image  */}
+          {/* <img src="/vaartalap.jpg" alt="My Image" style={{ width: '200px' }} /> */}
         </div>
         {/* Right Section */}
         <div className='bg-base-100 text-primary w-full md:w-1/2 p-8'>
