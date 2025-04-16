@@ -9,8 +9,8 @@ import { getChatMessages, messageSend, users } from "../../../app/controllers/Me
 const messageRoutes = express.Router()
 const upload = multer({ dest: "uploads/" })
 
-messageRoutes.post('/users', userAuth, users)
-messageRoutes.post('/:receiverId', userAuth, getChatMessages)
+messageRoutes.get('/users', userAuth, users)
+messageRoutes.get('/:receiverId', userAuth, getChatMessages)
 messageRoutes.post('/send/:receiverId', userAuth, upload.single('image'), messageSend)
 
 export default messageRoutes
