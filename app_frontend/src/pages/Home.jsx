@@ -5,15 +5,17 @@ import UserChat from './UserChat'
 import NoUserChat from './NoUserChat'
 
 export default function Home() {
-  const {selectedUser} = useChatStore()
+  const { selectedUser } = useChatStore()
+
   return (
-    <>
-      <div className="h-screen flex">
-        {/* Sidebar */}
-        <Sidebar />
-        {/* Chat Section */}
-        {selectedUser ? <UserChat />: <NoUserChat />}
+    <div className="h-screen flex flex-col md:flex-row overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Chat Section */}
+      <div className="flex-1 overflow-hidden">
+        {selectedUser ? <UserChat /> : <NoUserChat />}
       </div>
-    </>
+    </div>
   )
 }

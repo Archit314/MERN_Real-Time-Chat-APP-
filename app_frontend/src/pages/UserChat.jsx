@@ -1,33 +1,50 @@
-import React from 'react'
+import React from 'react';
 
 export default function UserChat() {
   return (
-    <>
-      <div className="h-screen flex">
-        {/* Chat Section */}
-        <div className="w-3/4 bg-base-100 flex flex-col">
-          {/* Chat Header */}
-          <div className="bg-primary text-white p-4 font-bold text-lg rounded-3xl">Chat with Friend</div>
-          
-          {/* Chat Messages */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-4">
-            <div className="bg-primary text-base-100 p-3 rounded-lg self-start max-w-xs">Hello!</div>
-            <div className="bg-primary text-base-100 p-3 rounded-lg self-end max-w-xs ml-auto">Hi there!</div>
-          </div>
-
-          {/* Chat Input */}
-          <div className="bg-base-200 p-4 flex items-center sticky bottom-0 w-full rounded-3xl">
-            <input 
-              type="text" 
-              placeholder="Type a message..." 
-              className="flex-1 bg-base-100 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button className="ml-2 bg-primary text-white p-2 rounded-lg hover:bg-base-300 hover:text-primary">
-              Send
-            </button>
-          </div>
-        </div>
+    <div className="h-[calc(100vh-4rem)] flex flex-col bg-base-100 rounded-none md:rounded-lg shadow-md overflow-hidden">
+      {/* Chat Header */}
+      <div className="bg-primary text-white p-4 font-semibold text-xl shadow z-10">
+        Chat with Friend
       </div>
-    </>
-  )
+
+      {/* Chat Messages */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+        {/* Sample Message Blocks */}
+        {[...Array(20)].map((_, i) => (
+          <div key={i} className={`flex items-end ${i % 2 === 0 ? 'justify-start' : 'justify-end'} gap-2`}>
+            {i % 2 === 0 && (
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Friend" />
+                </div>
+              </div>
+            )}
+            <div className={`${i % 2 === 0 ? 'bg-base-300 text-primary' : 'bg-primary text-white'} px-4 py-2 rounded-b-xl ${i % 2 === 0 ? 'rounded-tr-xl' : 'rounded-tl-xl'} max-w-xs`}>
+              {i % 2 === 0 ? 'Hey! How\'s everything going?' : 'All good! Just working on a new project.'}
+            </div>
+            {i % 2 !== 0 && (
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="You" />
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Chat Input */}
+      <div className="bg-base-200 border-t p-4 flex items-center gap-3">
+        <input
+          type="text"
+          placeholder="Type a message..."
+          className="flex-1 bg-base-100 px-4 py-2 border border-base-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+        <button className="bg-primary text-white px-5 py-2 rounded-full hover:bg-primary/80 transition-all">
+          Send
+        </button>
+      </div>
+    </div>
+  );
 }
