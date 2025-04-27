@@ -49,7 +49,8 @@ export const useChatStore = create((set) => ({
 
             return {
                 status: getMessagesResponse.data.status,
-                message: getMessagesResponse.data.message
+                message: getMessagesResponse.data.message,
+                data: getMessagesResponse.data.data
             }
         } catch (error) {
             console.log(`Error in useChatStore -> getMessages: `, error);
@@ -58,12 +59,14 @@ export const useChatStore = create((set) => ({
             if(error.status == 422){
                 return {
                     status: error.response.data.status,
-                    message: error.response.data.message
+                    message: error.response.data.message,
+                    data: null
                 }
             }
             return {
                 status: 500,
-                message: error.message
+                message: error.message,
+                data: null
             }
         }
     },
